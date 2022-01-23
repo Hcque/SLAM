@@ -11,14 +11,6 @@ load ../data/odom_motions
 % the motions as they are estimated by scan-matching
 load ../data/scanmatched_motions
 
-x = scanmatched_motions(:,1);
-y = scanmatched_motions(:,2);
-z = scanmatched_motions(:,3);
-
-plot3(x,y,z);
-
-plot(x,y);
-
 % create our measurements vector z
 z = [scanmatched_motions odom_motions];
 
@@ -34,9 +26,21 @@ odom_trajectory = compute_trajectory(odom_motions);
 scanmatch_trajectory = compute_trajectory(scanmatched_motions);
 calibrated_trajectory = compute_trajectory(calibrated_motions);
 
+##
+##figure(1);
+##plot(odom_trajectory(:,1), odom_trajectory(:,2));
+##  
+##figure(2);
+##plot(scanmatch_trajectory(:,1), scanmatch_trajectory(:,2));
+##
+##figure(3);
+##plot(calibrated_trajectory(:,1), calibrated_trajectory(:,2));
+
+
 % plot the trajectories
 plot(
   odom_trajectory(:,1), odom_trajectory(:,2), ";Uncalibrated Odometry;",
   scanmatch_trajectory(:,1), scanmatch_trajectory(:,2), ";Scan-Matching;",
-  calibrated_trajectory(:,1), calibrated_trajectory(:,2), ";Calibrated Odometry;");
+  calibrated_trajectory(:,1), calibrated_trajectory(:,2), ";Calibrated Odometry;"
+  );
 print -dpng "../plots/odometry-calibration.png"
