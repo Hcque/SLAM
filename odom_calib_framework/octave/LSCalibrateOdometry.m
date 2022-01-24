@@ -1,3 +1,6 @@
+% computer HM from write
+% inv 
+
 more off;
 clear all;
 close all;

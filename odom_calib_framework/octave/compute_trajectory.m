@@ -16,8 +16,8 @@ function T = compute_trajectory(U)
   % after computing the current pose of the robot
   for i = 1:size(U,1)
     currentM = v2t(U(i, :));
-    T(i+1,:) = ( t2v( currentM * currentPose ) )';
-    currentPose = v2t(T(i+1,:)');
+    T(i+1,:) = ( t2v(  currentPose * currentM ) )';
+    currentPose = v2t(T(i+1,:));
     %disp(T(i+1,:));
   end
 end
