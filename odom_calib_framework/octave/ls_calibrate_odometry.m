@@ -11,21 +11,20 @@ function X = ls_calibrate_odometry(Z)
   % initial solution (the identity transformation)
   X = eye(3); 
   n = size(Z)(1);
-  
 
   % TODO: initialize H and b of the linear system
   H = zeros(9,9); b = zeros(9,1);
   % TODO: loop through the measurements and update H and b
   % You may call the functions error_function and jacobian, see below
   % We assume that the information matrix is the identity.
-  #disp(_c);
-  #disp(X);
+
   for i = 1:n
     J = jacobian(i, Z);
     ei = error_function(i, X, Z);
     H = H + J'*J; 
     b = b + (ei'*J)';
   endfor
+  
   % TODO: solve and update the solution
 ##    L = chol(H, "lower");
 ##    y = linsolve(L, -b', optimset('LT', true));
@@ -47,29 +46,6 @@ function X = ls_calibrate_odometry(Z)
   X(2,:) += deltaxH(1,4:6);
   X(3,:) += deltaxH(1,7:9);
 
-##  % initial solution (the identity transformation)
-##  X = eye(3);
-##  
-##  % TODO: initialize H and b of the linear system
-##  H = zeros(9,9);
-##  b = zeros(1,9);
-##  
-##  % TODO: loop through the measurements and update H and b
-##  % You may call the functions error_function and jacobian, see below
-##  % We assume that the information matrix is the identity.
-##  for i=1:size(Z, 1)
-##    e = error_function(i, X, Z);
-##    J = jacobian(i, Z);
-##    Om = eye(3);
-##    H += J'*Om*J;
-##    b += e'*Om*J;
-##  endfor
-##  
-##  % TODO: solve and update the solution
-##  L = chol(H, "lower");
-##  y = linsolve(L, -b', optimset('LT', true));
-##  x = linsolve(L', y, optimset('UT', true));
-##  X = X - reshape(x, 3, 3)';
 end
 
 % this function computes the error of the i^th measurement in Z
