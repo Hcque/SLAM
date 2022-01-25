@@ -12,40 +12,50 @@ function X = ls_calibrate_odometry(Z)
   X = eye(3); 
   n = size(Z)(1);
 
-  % TODO: initialize H and b of the linear system
-  H = zeros(9,9); b = zeros(9,1);
-  % TODO: loop through the measurements and update H and b
-  % You may call the functions error_function and jacobian, see below
-  % We assume that the information matrix is the identity.
+  for _c=1:10
+    % TODO: initialize H and b of the linear system
+    H = zeros(9,9); b = zeros(1,9);
+    % TODO: loop through the measurements and update H and b
+    % You may call the functions error_function and jacobian, see below
+    % We assume that the information matrix is the identity.
 
-  for i = 1:n
-    J = jacobian(i, Z);
-    ei = error_function(i, X, Z);
-    H = H + J'*J; 
-    b = b + (ei'*J)';
+    for i = 1:n
+      J = jacobian(i, Z);
+      ei = error_function(i, X, Z);
+      H = H + J'*J; 
+      b = b + (ei'*J);
+    endfor
+    
+    
+      % TODO: solve and update the solution
+  ##  L = chol(H, "lower");
+  ##  y = linsolve(L, -b');
+  ##  x = linsolve(L', y);
+  ##  X = X - reshape(x, 3, 3)';
+    
+    % TODO: solve and update the solution
+  ##    L = chol(H, "lower");
+  ##    y = linsolve(L, -b', optimset('LT', true));
+  ##    x = linsolve(L', y, optimset('UT', true));
+  ##    X = X - reshape(x, 3, 3)';
+    
+    #R = chol( H );
+    #L = R';
+    
+  ##    L = chol(H, "lower");
+  ##    y = linsolve(L, -b, optimset('LT', true));
+  ##    disp(y);
+  ##    
+  ##    deltaxH = -1*linsolve(L', y, optimset('UT', true));
+  ##    
+
+    deltax = -1*inv(H)*(b');
+    deltaxH = deltax';
+    X(1,:) -= deltaxH(1,1:3);
+    X(2,:) -= deltaxH(1,4:6);
+    X(3,:) -= deltaxH(1,7:9);
   endfor
   
-  % TODO: solve and update the solution
-##    L = chol(H, "lower");
-##    y = linsolve(L, -b', optimset('LT', true));
-##    x = linsolve(L', y, optimset('UT', true));
-##    X = X - reshape(x, 3, 3)';
-  
-  #R = chol( H );
-  #L = R';
-  
-##    L = chol(H, "lower");
-##    y = linsolve(L, -b, optimset('LT', true));
-##    disp(y);
-##    
-##    deltaxH = -1*linsolve(L', y, optimset('UT', true));
-##    
-  deltax = -1*inv(H)*b;
-  deltaxH = deltax';
-  X(1,:) += deltaxH(1,1:3);
-  X(2,:) += deltaxH(1,4:6);
-  X(3,:) += deltaxH(1,7:9);
-
 end
 
 % this function computes the error of the i^th measurement in Z
