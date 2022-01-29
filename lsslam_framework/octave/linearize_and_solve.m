@@ -1,5 +1,6 @@
 % performs one iteration of the Gauss-Newton algorithm
 % each constraint is linearized and added to the Hessian
+% gauss Newton
 
 function dx = linearize_and_solve(g)
 
@@ -35,7 +36,7 @@ for eid = 1:length(g.edges)
 
 
     % TODO: compute and add the term to H and b
-
+    
 
     if (needToAddPrior)
       % TODO: add the prior for one pose of this edge
@@ -60,10 +61,11 @@ for eid = 1:length(g.edges)
     % A Jacobian wrt x1
     % B Jacobian wrt x2
     [e, A, B] = linearize_pose_landmark_constraint(x1, x2, edge.measurement);
-
+    
+    
 
     % TODO: compute and add the term to H and b
-
+    
 
   end
 end

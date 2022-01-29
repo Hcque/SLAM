@@ -16,12 +16,12 @@ load ../data/simulation-pose-pose.dat
 %load ../data/dlr.dat
 
 % plot the initial state of the graph
-plot_graph(g, 0);
+%plot_graph(g, 0);
 
 printf('Initial error %f\n', compute_global_error(g));
 
 % the number of iterations
-numIterations = 100;
+numIterations = 3;
 
 % maximum allowed dx
 EPSILON = 10^-4;
@@ -34,7 +34,9 @@ for i = 1:numIterations
   printf('Performing iteration %d\n', i);
 
   dx = linearize_and_solve(g);
-
+  
+  nnz = nnz_of_graph(g);
+  disp(nnz);
   % TODO: apply the solution to the state vector g.x
 
   % plot the current state of the graph
@@ -46,7 +48,10 @@ for i = 1:numIterations
   printf('Current error %f\n', err);
 
   % TODO: implement termination criterion as suggested on the sheet
-
+  if (max(abs(dx)) < EPSILON)
+    break;
+  endif
+    
 end
 
 printf('Final error %f\n', err);
