@@ -49,6 +49,7 @@ for i = 1:numIterations
 
   % TODO: implement termination criterion as suggested on the sheet
   if (max(abs(dx)) < EPSILON)
+    disp("terminates!);
     break;
   endif
     

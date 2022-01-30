@@ -22,7 +22,10 @@ x = zeros(3, 1);
 
 % Iterate over odometry commands and update the robot pose
 % according to the motion model
-for t = 1:size(data.timestep, 2)
+disp(size(data.timestep, 2));
+
+%for t = 1:size(data.timestep, 2)
+for t = 1: 20
 
     % Update the pose of the robot based on the motion model
     x = motion_command(x, data.timestep(t).odometry);

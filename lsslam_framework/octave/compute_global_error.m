@@ -28,7 +28,9 @@ for eid = 1:length(g.edges)
     %TODO compute the error of the constraint and add it to Fx.
     % Use edge.measurement and edge.information to access the
     % measurement and the information matrix respectively.
-    eil = 
+    R = v2t(x);
+    R(:,3) = [0 0 1]';
+    eil = R' * (l - v2t(x)(:,3) - edge.measurement;
     Fx += eil * edge.information * eil';
 
   end

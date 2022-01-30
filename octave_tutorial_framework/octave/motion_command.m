@@ -5,7 +5,11 @@ function [x] = motion_command(x, u)
 % Use u.r1, u.t, and u.r2 to access the rotation and translation values
 
 %TODO: update x according to the motion represented by u
-
+  theta = x(3,1);
+  x(1,1) = x(1,1) + u.t * cos(theta + u.r1);
+  x(2,1) = x(2,1) + u.t * sin(theta + u.r1);
+  x(3,1) = normalize_angle( u.r1 + theta + u.r2 );
+  
 %TODO: remember to normalize theta by calling normalize_angle for x(3)
 
 end
