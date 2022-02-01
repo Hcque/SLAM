@@ -24,15 +24,16 @@ x = zeros(3, 1);
 % according to the motion model
 disp(size(data.timestep, 2));
 
-%for t = 1:size(data.timestep, 2)
-for t = 1: 20
+for t = 1:size(data.timestep, 2)
+%for t = 1: 20
 
     % Update the pose of the robot based on the motion model
     x = motion_command(x, data.timestep(t).odometry);
 
     %Generate visualization plots of the current state
     plot_state(x, landmarks, t, data.timestep(t).sensor);
-
+    disp(data.timestep(t).sensor);
+    
     disp("Current robot pose:")
     disp("x = "), disp(x)
 endfor
