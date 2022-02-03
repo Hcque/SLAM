@@ -53,7 +53,7 @@ showGui = true;  % show a window while the algorithm runs
 %for t = 1:size(data.timestep, 2)
 for t = 1:10
     #disp(data.timestep(t).sensor);
-    disp(mu);
+    #disp(mu);
     % Perform the prediction step of the EKF
     [mu, sigma] = prediction_step(mu, sigma, data.timestep(t).odometry);
     

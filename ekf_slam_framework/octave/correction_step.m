@@ -31,8 +31,8 @@ for i = 1:m
 	% If the landmark is obeserved for the first time:
 	if(observedLandmarks(landmarkId)==false)
 		% TODO: Initialize its pose in mu based on the measurement and the current robot pose:
-		mu(landmarkId*2+2) = mu(1) + z(i).range * cos(z(i).bearing);
-    mu(landmarkId*2+3) = mu(2) + z(i).range * sin(z(i).bearing);
+		mu(landmarkId*2+2) = mu(1) + z(i).range * cos( z(i).bearing + mu(3));
+    mu(landmarkId*2+3) = mu(2) + z(i).range * sin( z(i).bearing + mu(3));
 		% Indicate in the observedLandmarks vector that this landmark has been observed
 		observedLandmarks(landmarkId) = true;
 	endif
@@ -62,7 +62,7 @@ Q = 0.01 * eye(2*m,2*m);
 % TODO: Compute the Kalman gain
 # H : 2*m X 3+2N
 #sigma: 
-Kt = sigma * H' * (H * sigma* H' + Q);
+Kt = sigma * H' * (H * sigma * H' + Q);
 % TODO: Compute the difference between the expected and recorded measurements.
 % Remember to normalize the bearings after subtracting!
 % (hint: use the normalize_all_bearings function available in tools)
@@ -74,7 +74,7 @@ _diff = Z - expectedZ;
 % Normalize theta in the robot pose.
 mu = mu + Kt * _diff;
 mu(3,1) = normalize_angle(mu(3,1));
-sigma = (eye(2*N+3,2*N+3) - Kt*H) * sigma;
+sigma = ( eye(2*N+3,2*N+3) - Kt*H ) * sigma;
 
 end
 
