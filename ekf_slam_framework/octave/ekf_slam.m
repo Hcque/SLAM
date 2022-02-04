@@ -20,6 +20,7 @@ addpath('tools');
 
 % Read world data, i.e. landmarks. The true landmark positions are not given to the robot
 landmarks = read_world('../data/world.dat');
+
 %load landmarks;
 % Read sensor readings, i.e. odometry and range-bearing sensor
 data = read_data('../data/sensor_data.dat');
@@ -50,10 +51,9 @@ showGui = true;  % show a window while the algorithm runs
 
 % Perform filter update for each odometry-observation pair read from the
 % data file.
-%for t = 1:size(data.timestep, 2)
-for t = 1:10
-    #disp(data.timestep(t).sensor);
-    #disp(mu);
+for t = 1:size(data.timestep, 2)
+%for t = 1:10
+
     % Perform the prediction step of the EKF
     [mu, sigma] = prediction_step(mu, sigma, data.timestep(t).odometry);
     

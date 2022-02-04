@@ -15,12 +15,12 @@ for i = 1:numParticles
   particles(i).history = cell();
 end
 
-
 % re-weight the particles according to their distance to [0 0]
 sigma = diag([0.2 0.2]);
 for i = 1:numParticles
   particles(i).weight = exp(-1/2 * particles(i).pose' * inv(sigma) * particles(i).pose);
 end
+
 
 resampledParticles = resample(particles);
 

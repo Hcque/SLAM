@@ -62,7 +62,7 @@ Q = 0.01 * eye(2*m,2*m);
 % TODO: Compute the Kalman gain
 # H : 2*m X 3+2N
 #sigma: 
-Kt = sigma * H' * (H * sigma * H' + Q);
+Kt = sigma * H' * inv(H * sigma * H' + Q);
 % TODO: Compute the difference between the expected and recorded measurements.
 % Remember to normalize the bearings after subtracting!
 % (hint: use the normalize_all_bearings function available in tools)

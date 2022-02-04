@@ -29,27 +29,28 @@ end
 newParticles = struct;
 
 % TODO: implement the low variance re-sampling
-J = numParticles;
-r = rand() * 1/J;
-% the cumulative sum
+
+% the cummulative sum
+cs = cumsum(w);
+weightSum = cs(length(cs));
+
 % initialize the step and the current position on the roulette wheel
-c = particles(1).weight; i = 1;
-for j = 1:numParticles
-  U = r + (j-1)/J;
-  while (U > c) 
-    i += 1;
-    c += particles(i).weight;
-  endwhile
-  % ADD
-  newParticles(i).weight = particles(i).weight;
-  newParticles(i).pose = particles(i).pose;
-  newParticles(i).history = cell();  
-end
+step = weightSum / numParticles;
+position = unifrnd(0, weightSum);
+idx = 1;
+
 % walk along the wheel to select the particles
-##for i = 1:numParticles
-##  particles(i).weight = 1. / numParticles;
-##  particles(i).pose = zeros(3,1);
-##  particles(i).history = cell();
-##end
+for i = 1:numParticles
+  position += step;
+  if (position > weightSum)
+    position -= weightSum;
+    idx = 1;
+  end
+  while (position > cs(idx))
+    idx++;
+  end
+  newParticles(i) = particles(idx);
+  newParticles(i).weight = 1/numParticles;
+end
 
 end

@@ -15,21 +15,17 @@ r2Noise = noise(3);
 numParticles = length(particles);
 
 for i = 1:numParticles
-  
+
   % append the old position to the history of the particle
   particles(i).history{end+1} = particles(i).pose;
 
-  % TODO: sample a new pose for the particle
-  _r1_rand = normrnd(u.r1, r1Noise);
-  _trans_rand = normrnd(u.t, transNoise);
-  _r2_rand = normrnd(u.r2, r2Noise);
-  
-  old_theta = particles(i).pose(3);
-  particles(i).pose(1) = particles(i).pose(1) + _trans_rand *cos(old_theta+_r1_rand);
-  particles(i).pose(2) = particles(i).pose(2) + _trans_rand *sin(old_theta+_r1_rand);
-  particles(i).pose(3) = normalize_angle(_r1_rand + old_theta + _r2_rand);
-
-
+  % sample a new pose for the particle
+  r1 = normrnd(u.r1, r1Noise);
+  r2 = normrnd(u.r2, r2Noise);
+  trans = normrnd(u.t, transNoise);
+  particles(i).pose(1) = particles(i).pose(1) + trans*cos(particles(i).pose(3) + r1);
+  particles(i).pose(2) = particles(i).pose(2) + trans*sin(particles(i).pose(3) + r1);
+  particles(i).pose(3) = normalize_angle(particles(i).pose(3) + r1 + r2);
 end
 
 end
