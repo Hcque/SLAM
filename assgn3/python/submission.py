@@ -14,7 +14,7 @@ Q3.1.1 Eight Point Algorithm
 """
 def eight_point(pts1, pts2, M):
     # replace pass by your implementation
-    pass
+    N = pts1
 
 
 """
