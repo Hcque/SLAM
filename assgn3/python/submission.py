@@ -4,6 +4,7 @@ Submission Functions
 """
 
 # import packages here
+import helper
 
 """
 Q3.1.1 Eight Point Algorithm
@@ -14,8 +15,14 @@ Q3.1.1 Eight Point Algorithm
 """
 def eight_point(pts1, pts2, M):
     # replace pass by your implementation
-    N = pts1
-
+    N = pts1.size
+    # //A = [9*9]
+    # U, D, V = np.linalg.svd(A)
+    # F_hat = np.reshape( V.T[:,8] )
+    # U, D, V = np.linalg.svd(F_hat)
+    # D[8] = 0.0
+    # F = U @ D @ V.T
+    # return F
 
 """
 Q3.1.2 Epipolar Correspondences
@@ -27,7 +34,10 @@ Q3.1.2 Epipolar Correspondences
 """
 def epipolar_correspondences(im1, im2, F, pts1):
     # replace pass by your implementation
-    pass
+    N = pts2.size
+    # pts2 = np.array(N,2)
+    # for i = 0:N-1
+    #     # its the line 
 
 
 """
@@ -39,8 +49,8 @@ Q3.1.3 Essential Matrix
 """
 def essential_matrix(F, K1, K2):
     # replace pass by your implementation
-    pass
-
+    E = np.linalg.inv(K1) @ F @ np.linalg.inv(K2)
+    return E
 
 """
 Q3.1.4 Triangulation
