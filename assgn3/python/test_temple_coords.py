@@ -12,20 +12,25 @@ DATA_PATH = "../data/"
 img1 = io.imread(DATA_PATH+"im1.png")
 img2 = io.imread(DATA_PATH+"im2.png")
 some_cor = np.load(DATA_PATH+"some_corresp.npz")
-print(some_cor.files)
+# print(some_cor.files)
 pts1 = some_cor['pts1']; pts2 = some_cor['pts2']
 
-print(pts1.shape)
-print(pts1)
-print(img1.shape)
-print(img1.max())
-print(img1.min())
+
 # 2. Run eight_point to compute F
-# F = eight_point(pts1, pts2, M)
+M = max(img1.shape)
+F = eight_point(pts1, pts2, M)
+# hlp.displayEpipolarF(img1, img2, F)
 
 # 3. Load points in image 1 from data/temple_coords.npz
+tem_pts1 = np.load(DATA_PATH+"temple_coords.npz")
+tem_pts1 = tem_pts1['pts1']
+# print(tem_pts1.max())
+# print(tem_pts1.min())
+# print(img1.shape)
 
 # 4. Run epipolar_correspondences to get points in image 2
+tem_pts2 = epipolar_correspondences(img1, img2, F, tem_pts1)
+epipolarMatchGUI(img1, img2, F)
 
 # 5. Compute the camera projection matrix P1
 

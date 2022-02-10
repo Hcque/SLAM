@@ -4,7 +4,8 @@ Submission Functions
 """
 
 # import packages here
-import helper
+import numpy as np
+import helper as hlp
 
 """
 Q3.1.1 Eight Point Algorithm
@@ -14,15 +15,37 @@ Q3.1.1 Eight Point Algorithm
        [O] F, the fundamental matrix (3x3 matrix)
 """
 def eight_point(pts1, pts2, M):
-    # replace pass by your implementation
-    N = pts1.size
-    # //A = [9*9]
-    # U, D, V = np.linalg.svd(A)
-    # F_hat = np.reshape( V.T[:,8] )
-    # U, D, V = np.linalg.svd(F_hat)
-    # D[8] = 0.0
-    # F = U @ D @ V.T
-    # return F
+    N = pts1.shape[0]
+
+    # normalize pints coords in image
+    T = 1.0/M * np.eye(3);  T[2,2] = 1.0
+    Temp = 1.0/M * np.eye(N)
+    pts1 = Temp@pts1
+    pts2 = Temp@pts2
+    print(pts1)
+    A = np.zeros([N,9]) # we have overdeterminstic system
+    for i in range(N):
+        x_i = pts1[i][0]; y_i = pts1[i][1]
+        x_i_p = pts2[i][0]; y_i_p = pts2[i][1]
+        A[i,0] = x_i_p * x_i
+        A[i,1] = x_i_p * y_i
+        A[i,2] = x_i_p 
+        A[i,3] = y_i_p * x_i
+        A[i,4] = y_i_p * y_i
+        A[i,5] = y_i_p 
+        A[i,6] = x_i
+        A[i,7] = y_i
+        A[i,8] = 1
+
+    # print(A)
+    U, D, V = np.linalg.svd(A)
+    F_hat = V.T[:,8].reshape((3,3))
+    U, D, V = np.linalg.svd(F_hat)
+    D[2] = 0.0
+    F = U @ np.diag(D) @ V.T
+    F = T.T @ F @ T
+    print("F:", F.shape)
+    return F
 
 """
 Q3.1.2 Epipolar Correspondences
@@ -32,12 +55,38 @@ Q3.1.2 Epipolar Correspondences
            pts1, points in image 1 (Nx2 matrix)
        [O] pts2, points in image 2 (Nx2 matrix)
 """
+
+def _similarity(im1, im2, xi,yi,xi_prime, yi_prime):
+    a,b,c = im1.shape
+    for _c in range(c):
+        cost = abs(im1[xi,yi, _c] - im2[xi_prime, yi_prime,_c])
+    + abs(im1[xi-1,yi, _c] - im2[xi_prime, yi_prime, _c])
+    + abs(im1[xi+1,yi, _c] - im2[xi_prime+1, yi_prime, _c])
+    return cost
+
 def epipolar_correspondences(im1, im2, F, pts1):
     # replace pass by your implementation
-    N = pts2.size
-    # pts2 = np.array(N,2)
-    # for i = 0:N-1
-    #     # its the line 
+    MX, MY, _ = im1.shape
+    N = pts1.shape[0]
+    pts2 = np.zeros([N,2])
+    for i in range(N):
+        xi = pts1[i,0]; yi = pts1[i,1]
+        e = np.array([xi,yi,1]).reshape((3,1))
+        epi_line = F @ e # [a b c].T
+        # print(epi_line)
+        a = epi_line[0,0]; b = epi_line[1,0]; c = epi_line[2,0]
+
+        final_x = 0; final_y = 0; _cost = 1e8
+        for xi_prime in range(0, MX):
+            yi_prime = (-c -a*xi_prime ) / b
+
+            cur_cost = _similarity(im1, im2, xi,yi,xi_prime, yi_prime)
+            if cur_cost < _cost:
+                _cost = cur_cost; final_x = xi_prime; final_y = yi_prime
+        pts2[i,:] = [final_x,final_y]
+    return pts2
+
+
 
 
 """
@@ -49,7 +98,7 @@ Q3.1.3 Essential Matrix
 """
 def essential_matrix(F, K1, K2):
     # replace pass by your implementation
-    E = np.linalg.inv(K1) @ F @ np.linalg.inv(K2)
+    E = K2.T @ F @ K1
     return E
 
 """
