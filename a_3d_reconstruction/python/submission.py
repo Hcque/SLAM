@@ -86,9 +86,6 @@ def epipolar_correspondences(im1, im2, F, pts1):
         pts2[i,:] = [final_x,final_y]
     return pts2
 
-
-
-
 """
 Q3.1.3 Essential Matrix
        [I] F, the fundamental matrix (3x3 matrix)

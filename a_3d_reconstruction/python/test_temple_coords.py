@@ -30,7 +30,7 @@ tem_pts1 = tem_pts1['pts1']
 
 # 4. Run epipolar_correspondences to get points in image 2
 tem_pts2 = epipolar_correspondences(img1, img2, F, tem_pts1)
-epipolarMatchGUI(img1, img2, F)
+# epipolarMatchGUI(img1, img2, F)
 
 # 5. Compute the camera projection matrix P1
 
