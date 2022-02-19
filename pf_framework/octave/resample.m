@@ -33,12 +33,12 @@ J = numParticles;
 r = rand() * 1/J;
 % the cumulative sum
 % initialize the step and the current position on the roulette wheel
-c = particles(1).weight; i = 1;
+c = w(1); i = 1;
 for j = 1:numParticles
   U = r + (j-1)/J;
   while (U > c) 
     i += 1;
-    c += particles(i).weight;
+    c += w(i);
   endwhile
   % ADD
   newParticles(i).weight = particles(i).weight;
