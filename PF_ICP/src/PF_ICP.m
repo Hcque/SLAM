@@ -10,14 +10,12 @@ xRangeMin;
 xRangeMax;
 
 
-
-
 for it = 1: NUM_ITER
   % 1 motion model
   if (it == 1)
     % 0 init
     for i = 1:NUM_PAR
-      par(:).w = 1 / MUM_PAR;
+      par(:).w = 1.0 / MUM_PAR;
       
       par.tx = xRangeMin + rand()* (xRangeMax - xRangeMin);
       par.ty = yRangeMin + rand()* (yRangeMax - yRangeMin);
@@ -25,13 +23,7 @@ for it = 1: NUM_ITER
       par.Rx_th = -pi + (rand()-0.5 ) * 2 * pi;
       par.Ry_th = -pi + (rand()-0.5 ) * 2 * pi;
       par.Rz_th = -pi + (rand()-0.5 ) * 2 * pi; 
-##      % TODO  
-##      Rt = [par.tx, ...];
-##      [R0, t0] = t2T([par.tx, ...]);
-##      [R,t] = ICP_Update(par(i), );
-##      Rt_hat = T2t();
-##      e = Rt - Rt_hat;
-##      par.S = e*e';
+
     end
 
   endif
@@ -52,14 +44,20 @@ for it = 1: NUM_ITER
     par.tx = ...;
     
   endfor
-
+  
+  WW = [];
   % 2 weight
   for i = 1:NUM_PAR
-    par.w = f(tmp_points, model_points);%sum(  );
+    [kidx,D] = knnsearch(ptmp,pmodel,'k',1);
+    WW[end+1] = D'*D;
   endfor
-
+  WW/max(WW);
+  WW = exp(WW);
+  WW / sum(WW);
+  par(:).w = WW;
   % 3 resample
-  par = resample(par. NUM_PAR);  
+  par = resample(par, NUM_PAR);  
+  
 end
 
 
